@@ -23,16 +23,24 @@ var expect = function( assertion ) {
 }
 
 Object.prototype.toEqual = function( expected ) {
-  return this === expected;
+  var assertion = this === expected;
+  if (!assertion) { log("Assertion Failed"); }
+  else { log("Assertion Passed"); }
 }
 String.prototype.toEqual = function( expected ) {
-  return this.toString() === expected;
+  var assertion = this === expected;
+  if (!assertion) { log("Assertion Failed"); }
+  else { log("Assertion Passed"); }
 }
 Number.prototype.toEqual = function( expected ) {
-  return this === expected;
+  var assertion = this === expected;
+  if (!assertion) { log("Assertion Failed"); }
+  else { log("Assertion Passed"); }
 }
 Array.prototype.toEqual = function( expected ) {
-  return this === expected;
+  var assertion = this === expected;
+  if (!assertion) { log("Assertion Failed"); }
+  else { log("Assertion Passed"); }
 }
 
 
