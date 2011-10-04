@@ -1,6 +1,6 @@
 # Bencoding-js
 
-Solution for implmenting the encoding and decoding of the Bencoding
+Solution for implmenting the encoding and decoding of the Bencode
 format.
 
 * [BitTorrent Specification](http://wiki.theory.org/BitTorrentSpecification)
