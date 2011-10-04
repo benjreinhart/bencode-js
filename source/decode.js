@@ -47,8 +47,6 @@ var Decode = (function() {
 
   // Private Methods
   dispatch = function() {
-    if ( currentIndex >= bencodedStrLength - 1 ) return;
-
     fn = Decode.prototype
     var type = fn.getType();
 
