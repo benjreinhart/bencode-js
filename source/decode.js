@@ -47,8 +47,9 @@ var Decode = (function() {
 
   // Private Methods
   dispatch = function() {
-    fn = Decode.prototype
-    var type = fn.getType();
+    var fn   = Decode.prototype
+      , type = fn.getType()
+    ;
 
     switch( type ) {
       case 'string':
