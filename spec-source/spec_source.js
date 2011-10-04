@@ -1,7 +1,10 @@
-window.log = function( message ) {
-  if ( console !== null && console !== undefined && typeof console.log === "function" )
-    return console.log(message);
-}
+window.log = function(msg) {
+  if ( typeof console !== "undefined" && console !== null ) {
+    if ( typeof console.log === "function" )
+      return console.log( msg );
+  }
+  return;
+};
 
 var assertEqual = function( actual, expected ) {
   var assertion = actual === expected;
