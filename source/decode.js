@@ -2,7 +2,9 @@ var Decode = (function() {
 
   // Private
   var bencodedString
+    , bencodedStrLength
     , decodedObject
+    , currentIndex
     , objectType
     , setType
     , setDecodedObject
@@ -12,8 +14,10 @@ var Decode = (function() {
 
   // Constructor
   function Decode(string) {
-    bencodedString = string;
-    objectType = this.getType();
+    currentIndex      = 0;
+    bencodedString    = string;
+    bencodedStrLength = bencodedString.length
+    objectType        = this.getType();
     return dispatch();
   }
 
@@ -22,10 +26,29 @@ var Decode = (function() {
     return decodedObject = obj;
   }
 
-  appendToDecodedObject = function( obj ) { }
+  appendToDecodedObject = function( obj, lastIdx ) {
+    // Increment currentIndex to its new position
+    currentIndex += lastIdx + 1;
+
+    switch( objectType ) {
+      case 'string':
+        return setDecodedObject( obj );
+      case 'integer':
+        return setDecodedObject( obj );
+      case 'list':
+        break;
+      case 'dictionary':
+        break;
+    }
+
+    if ( currentIndex >= bencodedStrLength - 1 ) return;
+    return dispatch();
+  }
 
   // Private Methods
   dispatch = function() {
+    if ( currentIndex >= bencodedStrLength - 1 ) return;
+
     fn = Decode.prototype
     var type = fn.getType();
 
@@ -57,7 +80,7 @@ var Decode = (function() {
   }
 
   Decode.prototype.getType = function() {
-    var char = this.getBencodedString().charAt(0);
+    var char = this.getBencodedString().charAt( currentIndex );
 
     if ( char.match(/\d/) ) {
       return "string";
@@ -75,45 +98,54 @@ var Decode = (function() {
     }
   }
 
-  Decode.prototype.getString = function(str) {
-    var str           = str || this.getBencodedString()
-      , strArray      = str.split(':')
-      , strLength     = strArray[0]
-      , currentStr    = strArray[1]
-      , result        = ""
+  Decode.prototype.getString = function() {
+
+    // We use currentIndex to extract the string from where we
+    // left off in our iteration over the bencoded string. We store
+    // this in str.
+    //
+    // Then we get the index of the colon separator, and store that in
+    // separatorIdx, which we'll use to get the number before the separator
+    // which represents the length of the string we want. We'll then use that
+    // number (stored in len) to get the desired string, and store that
+    // in result.
+
+    var str          = this.getBencodedString().substring( currentIndex )
+      , separatorIdx = str.indexOf(":")
     ;
 
-    for (var i = 0; i < strLength; ++i) {
-      result += currentStr[i];
-    }
+    if ( separatorIdx === -1 ) throw "Invalid String, colon separator not found";
 
-    if ( this.getObjectType() === 'string' ) {
-      return setDecodedObject( result );
-    }
+    var len    = str.substring( 0, separatorIdx )
+        endIdx = (separatorIdx + 1) + parseInt(len)
+      , result = str.substring( (separatorIdx + 1), endIdx )
+    ;
 
-    appendToDecodedObject( result );
-    return dispatch();
+    return appendToDecodedObject( result, endIdx );
   }
 
-  Decode.prototype.getInteger = function(str) {
-    var str        = str || this.getBencodedString()
-      , integerStr = str.match(/^i(\d+)e/)[1]
+  Decode.prototype.getInteger = function() {
+    var str        = this.getBencodedString( currentIndex )
+      , endIdx     = str.indexOf('e')
+      , int
     ;
 
-    var result = parseInt(integerStr);
+    str = str.slice( 0, endIdx )
+    int = str.replace(/i/, '').replace(/e/, '');
 
-    if ( this.getObjectType() === 'integer' ) {
-      return setDecodedObject( result );
-    }
+    var result = parseInt( int );
 
     appendToDecodedObject( result );
-    return dispatch();
   }
 
   return Decode;
 })();
 
-window.Decode = Decode;
+// Ensure compatibility with CommonJS modules or browser
+var root;
+root = typeof global !== "undefined" && global !== null ? global : window;
+
+root.Decode = Decode;
 
 String.prototype.decode = function() {
   object = new Decode( this );
