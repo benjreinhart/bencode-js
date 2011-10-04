@@ -9,4 +9,4 @@ format.
 This repo is implemented in a Ruby environment, for easy Jasmine testing
 integration.
 
-NOT READY FOR USE. Haven't finished this yet.
+NOT READY FOR USE. Work in progress.

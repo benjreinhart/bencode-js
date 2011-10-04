@@ -8,9 +8,4 @@ describe("Decoding", function() {
     bencodedString = 'i123e';
     expect( bencodedString.decode() ).toEqual( 123 );
   });
-
-  it("should fail", function() {
-    expect( null ).toEqual( true );
-  });
-
 });
