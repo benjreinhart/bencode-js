@@ -135,7 +135,7 @@ var Decode = (function() {
 
     var result = parseInt( int );
 
-    appendToDecodedObject( result );
+    return appendToDecodedObject( result, endIdx );
   }
 
   return Decode;
