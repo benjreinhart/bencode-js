@@ -129,8 +129,8 @@ var Decode = (function() {
       , int
     ;
 
-    str = str.slice( 0, endIdx )
-    int = str.replace(/i/, '').replace(/e/, '');
+    str = str.slice( 0, endIdx );
+    int = str.match( /\d+/ );
 
     var result = parseInt( int );
 
