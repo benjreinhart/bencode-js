@@ -1,4 +1,4 @@
-# Bencoding-js
+# Bencode-js
 
 Solution for implmenting the encoding and decoding of the Bencode
 format.
