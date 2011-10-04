@@ -132,6 +132,10 @@ var Decode = (function() {
     str = str.slice( 0, endIdx );
     int = str.match( /\d+/ );
 
+    if ( int === null ) {
+      throw "Encountered null integer in Bencoded String";
+    }
+
     var result = parseInt( int );
 
     return appendToDecodedObject( result, endIdx );
