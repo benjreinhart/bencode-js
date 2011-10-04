@@ -1,8 +1,8 @@
 describe("Decoding A String", function() {
-  var bencodedString = '6:string';
+  var bencodedString = '10:helloworld';
 
   it("should return a string of value 'helloworld' when given the bencoded string '10:helloworld'", function() {
-    expect( bencodedString.decode() ).toEqual( 'string' );
+    expect( bencodedString.decode() ).toEqual( 'helloworld' );
   });
 });
 
