@@ -17,6 +17,10 @@ describe("Encoding An Integer", function() {
     var num = -1234;
     expect( num.encode() ).toEqual( "i-1234e" );
   });
+
+  it("should remove multiple 0s", function() {
+    expect( (000).encode() ).toEqual( "i0e" );
+  });
 });
 
 describe("Encoding An Array", function() {
