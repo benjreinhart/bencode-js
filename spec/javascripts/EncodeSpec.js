@@ -14,3 +14,20 @@ describe("Encoding An Integer", function() {
   });
 });
 
+describe("Encoding An Array", function() {
+  var array = ["Benny", 123, "john", ["tom", 923] ];
+
+  it("should return a properly bencoded array", function() {
+    expect( array.encode() ).toEqual( "l5:Bennyi123e4:johnl3:tomi923eee" );
+  });
+});
+
+describe("Encoding An Object", function() {
+  var object = { one: "ben", two: ["john", 123, "james"], three: { key: "value" } };
+
+  var expectedString = "d3:one3:ben3:twol4:johni123e5:jamese5:threed3:key5:valueee";
+
+  it("should return a properly bencoded Object", function() {
+    expect( object.encode() ).toEqual( expectedString );
+  });
+});
