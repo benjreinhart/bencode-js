@@ -28,7 +28,7 @@ describe("Utility Functions", function() {
     });
   });
 
-  describe("Array.__each", function() {
+  describe("Object.__each", function() {
 
   });
 });
