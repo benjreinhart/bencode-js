@@ -11,7 +11,9 @@
 #   - dist/**/*.js
 #
 src_files:
-    - public/javascripts/**/*.js
+    - lib/bencode/utilities/utilities.js
+    - lib/bencode/decode.js
+    - lib/bencode/encode.js
 
 # stylesheets
 #
