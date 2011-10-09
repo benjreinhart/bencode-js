@@ -16,8 +16,8 @@ integration.
 
 # Usage
 
-The functions are attached to the native object's prototype, so you can
-just call encode or decode on Native objects like so:
+The functions are attached to the native object's ```prototype```, so you can
+just call ```encode()``` or ```decode()``` on an instance of an object like so:
 
 ### Encode
 
