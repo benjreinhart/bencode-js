@@ -47,3 +47,10 @@ attached to ```window```:
 window.Bencode.Encode
 window.Bencode.Decode
 ```
+
+# TODOS
+
+Needs much more thorough testing.
+
+Implement it so it can be used in both a Browser and CommonJS
+environment.
