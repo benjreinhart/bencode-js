@@ -52,5 +52,10 @@ window.Bencode.Decode
 
 Needs much more thorough testing.
 
+Needs much better Error handling.
+
+Decode class (especially the decode() method in the Decode class) needs
+refactoring.
+
 Implement it so it can be used in both a Browser and CommonJS
 environment.
