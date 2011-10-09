@@ -19,14 +19,10 @@ just call encode on Native objects like so:
 
 ### Encode
 
-```
   "string".encode()              // => "6:string"
   (123).encode()                 // => "i123e"
   ["str", 123].encode()          // => "l3:stri123ee"
   ({ key: "value" }).encode()    // => "d3:key5:valuee"
-```
 ### Decode
 
-```
   "d3:key5:valuee".decode()      // => { key: "value" }
-```
