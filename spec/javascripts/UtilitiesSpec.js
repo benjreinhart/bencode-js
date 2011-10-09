@@ -46,7 +46,7 @@ describe("Utility Functions", function() {
       expect( newObj ).toEqual( { obj1: "someVal 1 i", obj2: "someVal 2 i", obj3: "someVal 3 i" } );
     });
 
-    it("should break iteratio when iterator returns an instance of __Breaker", function() {
+    it("should break iteration when iterator returns an instance of __Breaker", function() {
       var iterator = function( item, key, obj ) {
         if ( key === "obj2" ) return new __Breaker;
         value = '' + item + ' i';
@@ -54,6 +54,23 @@ describe("Utility Functions", function() {
       }
       obj.__each( iterator, this );
       expect( newObj ).toEqual( { obj1: "someVal 1 i"} );
+    });
+  });
+
+  describe("Object.__length", function() {
+    var obj = {}
+
+    it("should calculate length appropriately", function() {
+      expect( obj.__length() ).toEqual( 0 );
+
+      obj.someVal = "string";
+      obj.someVal2 = "string2";
+
+      expect( obj.__length() ).toEqual( 2 );
+
+      obj.someVal3 = { key: "value" };
+
+      expect( obj.__length() ).toEqual( 3 );
     });
   });
 });
