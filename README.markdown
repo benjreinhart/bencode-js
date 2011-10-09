@@ -36,6 +36,6 @@ just call encode or decode on Native objects like so:
 If you need access to the classes, it is namespaced under
 
 ```
-  window.Bencode.Encode
-  window.Bencode.Decode
+window.Bencode.Encode
+window.Bencode.Decode
 ```
