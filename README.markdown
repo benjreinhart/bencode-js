@@ -22,11 +22,12 @@ dependency and is required in order for ```Encode``` and ```Decode```
 to work). I recommend combining all three files into one, no need for
 extra HTTP requests.
 
-
-The functions are attached to the native object's ```prototype```, so you can
-just call ```encode()``` or ```decode()``` on an instance of an object like so:
-
 ### Encode
+
+The ```encode()``` function is attached to ```Object```, ```Array```,
+```String``` and ```Number```'s prototype, so you can just call it on
+an instance of those types like so:
+
 
 ```
 "string".encode()              // => "6:string"
@@ -36,6 +37,10 @@ just call ```encode()``` or ```decode()``` on an instance of an object like so:
 ```
 
 ### Decode
+
+The ```decode()``` function is attached to ```String```'s prototype
+and is therefore available on an instance of a string like so:
+
 
 ```
 "d3:key5:valuee".decode()      // => { key: "value" }
