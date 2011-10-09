@@ -33,7 +33,8 @@ just call encode or decode on Native objects like so:
 "d3:key5:valuee".decode()      // => { key: "value" }
 ```
 
-If you need access to the classes, it is namespaced under
+If you need access to the classes, it is namespaced under Bencode and
+attached to ```window```:
 
 ```
 window.Bencode.Encode
