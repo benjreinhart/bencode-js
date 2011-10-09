@@ -9,13 +9,15 @@ format.
 Currently only works in browser environments, but support for CommonJS
 modules coming soon.
 
+This solution uses classes and OOP.
+
 This repo is implemented in a Ruby environment, for easy Jasmine testing
 integration.
 
 # Usage
 
 The functions are attached to the native object's prototype, so you can
-just call encode on Native objects like so:
+just call encode or decode on Native objects like so:
 
 ### Encode
 
@@ -29,4 +31,11 @@ just call encode on Native objects like so:
 
 ```
 "d3:key5:valuee".decode()      // => { key: "value" }
+```
+
+If you need access to the classes, it is namespaced under
+
+```
+  window.Bencode.Encode
+  window.Bencode.Decode
 ```
