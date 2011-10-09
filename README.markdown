@@ -6,8 +6,8 @@ format.
 * [BitTorrent Specification](http://wiki.theory.org/BitTorrentSpecification)
 * [Bencode](http://en.wikipedia.org/wiki/Bencode)
 
-Currently only works in browser environments, but support for CommonJS
-modules coming soon.
+Currently only works in browser environments, but I intend to add
+support for CommonJS modules.
 
 This solution uses classes and OOP.
 
