@@ -16,6 +16,12 @@ integration.
 
 # Usage
 
+Include the files in the webpage. Both the Encode and Decode classes use
+functions from the utilities module (aka utilities.js is a dependency
+and is required in order for Encode and Decode to work). Most of the
+time, you would be using both the Encode and Decode classes, and so
+should probably put all three files into one.
+
 The functions are attached to the native object's ```prototype```, so you can
 just call ```encode()``` or ```decode()``` on an instance of an object like so:
 
@@ -27,6 +33,7 @@ just call ```encode()``` or ```decode()``` on an instance of an object like so:
 ["str", 123].encode()          // => "l3:stri123ee"
 ({ key: "value" }).encode()    // => "d3:key5:valuee"
 ```
+
 ### Decode
 
 ```
