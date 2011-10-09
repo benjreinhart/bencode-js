@@ -16,10 +16,11 @@ integration.
 
 # Usage
 
-Include the files in the webpage. Both the Encode and Decode classes use
-functions from the utilities module (aka utilities.js is a dependency
-and is required in order for Encode and Decode to work). I recommend
-combining all three files into one, no need for extra HTTP requests.
+Include the files in the webpage. Both the ```Encode``` and ```Decode```
+classes use functions from the utilities module (aka utilities.js is a
+dependency and is required in order for ```Encode``` and ```Decode```
+to work). I recommend combining all three files into one, no need for
+extra HTTP requests.
 
 The functions are attached to the native object's ```prototype```, so you can
 just call ```encode()``` or ```decode()``` on an instance of an object like so:
