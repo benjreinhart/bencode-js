@@ -8,7 +8,7 @@ describe("Decoding", function() {
     });
   });
 
-  describe("A Integer", function() {
+  describe("An Integer", function() {
     var bencodedString = 'i123e';
 
     it("should return an integer of value 123 when given the bencoded string 'i123e'", function() {
