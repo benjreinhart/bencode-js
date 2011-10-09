@@ -22,6 +22,14 @@ dependency and is required in order for ```Encode``` and ```Decode```
 to work). I recommend combining all three files into one, no need for
 extra HTTP requests.
 
+If you need access to the classes, it is namespaced under Bencode and
+attached to ```window```:
+
+```
+window.Bencode.Encode
+window.Bencode.Decode
+```
+
 The functions are attached to the native object's ```prototype```, so you can
 just call ```encode()``` or ```decode()``` on an instance of an object like so:
 
@@ -38,14 +46,6 @@ just call ```encode()``` or ```decode()``` on an instance of an object like so:
 
 ```
 "d3:key5:valuee".decode()      // => { key: "value" }
-```
-
-If you need access to the classes, it is namespaced under Bencode and
-attached to ```window```:
-
-```
-window.Bencode.Encode
-window.Bencode.Decode
 ```
 
 # TODOS
