@@ -1,10 +1,16 @@
 describe("Decoding", function() {
 
   describe("A String", function() {
-    var bencodedString = '10:helloworld';
+    var bencodedString = '10:helloworld'
+      , bencodedStringWithColon = '14:0.0.0.0:311989'
+    ;
 
     it("should return a string of value 'helloworld' when given the bencoded string '10:helloworld'", function() {
       expect( bencodedString.decode() ).toEqual( 'helloworld' );
+    });
+
+    it("should return a string of value '0.0.0.0:311989' when given '14:0.0.0.0:311989'", function() {
+      expect( bencodedStringWithColon.decode() ).toEqual('0.0.0.0:311989');
     });
   });
 
@@ -27,8 +33,8 @@ describe("Decoding", function() {
   });
 
   describe("An Object", function() {
-    var bencodedObject = "d3:key5:value3:numi123e4:key2d3:keyl8:a stringi-9234eeee"
-      , expectedObject = { key: "value", num: 123, key2: { key: ["a string", -9234] } }
+    var bencodedObject = "d3:key5:value3:numi123e4:key2d3:keyl8:a stringi-9234e14:0.0.0.0:311989eee"
+      , expectedObject = { key: "value", num: 123, key2: { key: ["a string", -9234, 0.0.0.0:311989] } }
     ;
 
     it("should return an object with the appopriate values", function() {
