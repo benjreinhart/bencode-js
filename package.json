@@ -1,0 +1,30 @@
+{
+    "name": "bencode-js"
+  , "version": "0.0.1-dev"
+  , "description": "JavaScript solution for implmenting the encoding and decoding of the Bencode format"
+  , "author": "benjreinhart"
+
+  , "keywords":
+    [
+        "bencode"
+      , "bittorrent"
+      , "encode"
+      , "decode"
+    ]
+
+  , "devDependencies":
+    {
+        "chai"          : ">=1.5.0"
+      , "mocha"         : ">=1.8.2"
+      , "coffee-script" : ">=1.4.0"
+    }
+
+  , "repository":
+    {
+        "type" : "git"
+      , "url"  : "git@github.com:benjreinhart/bencode-js.git"
+    }
+
+  , "license": "MIT"
+  , "main": "index"
+}
