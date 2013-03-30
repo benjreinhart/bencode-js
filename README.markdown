@@ -1,5 +1,8 @@
 # Bencode-js
 
+CURRENTLY A WORK IN PROGRESS. NOT FINISHED YET.
+
+
 JavaScript solution for implmenting the encoding and decoding of the Bencode
 format.
 
