@@ -1,4 +1,11 @@
+var Encode = require('./lib/encode')
+  , Decode = require('./lib/decode');
+
 module.exports = {
-  encode: function() { console.log("HELLO WORLD") },
-  decode: function() { console.log("HELLO WORLD") }
+  encode  : Encode.encode,
+  decode  : Decode.decode,
+  classes : {
+    Encode: Encode,
+    Decode: Decode
+  }
 };
