@@ -6,7 +6,7 @@ module.exports = class Decode
     @bencodedStringLength = @bencodedString.length
 
     counter  = 0
-    @counter = (amount) ->
+    @counter = (amount) =>
       return counter unless amount?
       counter += amount
 
@@ -14,19 +14,19 @@ module.exports = class Decode
     type = getType @bencodedString[ @counter() ]
     return (decodingFunctions[type].call this) unless isDataStructure type
 
-    @counter 1
     object = if type is 'list' then [] else {}
 
+    @counter 1
     while @counter() < @bencodedStringLength
+      if 'e' is @bencodedString[ @counter() ]
+        @counter 1
+        break
+
       if type is 'list'
         object.push @decode()
       else
         key = @decode()
         object[ key ] = @decode()
-
-      if @bencodedString[ @counter() ] is 'e'
-        @counter 1
-        break
 
     object
 
@@ -67,3 +67,4 @@ module.exports = class Decode
   decodingFunctions =
     string  : decodeString
     integer : decodeInteger
+
