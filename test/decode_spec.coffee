@@ -31,7 +31,7 @@ describe 'decoding', ->
       expect(decode 'llelelelleee').to.eql [[], [], [], [[]]]
       expect(decode 'ldededee').to.eql [{}, {}, {}]
 
-  describe 'objects', ->
+  describe 'dictionaries', ->
     it 'creates an object with strings and integers', ->
       expect(decode 'd3:agei100e4:name8:the dudee').to.eql { age: 100, name: 'the dude' }
 
@@ -44,7 +44,7 @@ describe 'decoding', ->
     it 'has no problem with an empty object', ->
       expect(decode 'de').to.eql {}
 
-  describe 'lists and objects', ->
+  describe 'lists and dictionaries', ->
     it 'creates an object with a list of objects', ->
       bencodedString = 'd9:locationsld7:address10:484 streeted7:address10:828 streeteee'
       expected = { locations: [{ address: '484 street' }, { address: '828 street' } ]}
