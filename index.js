@@ -3,9 +3,5 @@ var Encode = require('./lib/encode')
 
 module.exports = {
   encode  : Encode.encode,
-  decode  : Decode.decode,
-  classes : {
-    Encode: Encode,
-    Decode: Decode
-  }
+  decode  : Decode.decode
 };
