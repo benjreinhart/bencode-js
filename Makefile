@@ -13,10 +13,10 @@ watch:
 	$(COFFEE) -cwo ./lib ./src
 
 browserify:
-	$(CJSIFY) --export Bencode ./index.js -o ./bencode.js
+	$(CJSIFY) --export Bencode ./index.js --output ./bencode.js
 
 browserify-min:
-	$(CJSIFY) --minify --export Bencode ./index.js -o ./bencode-min.js
+	$(CJSIFY) --minify --export Bencode ./index.js --output ./bencode-min.js
 
 test:
 	$(MOCHA) --compilers coffee:coffee-script --reporter spec --recursive --colors
