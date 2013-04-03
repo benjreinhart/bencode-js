@@ -1,5 +1,8 @@
-MOCHA=./node_modules/.bin/mocha
-COFFEE=./node_modules/.bin/coffee
+BIN=./node_modules/.bin
+
+MOCHA=$(BIN)/mocha
+COFFEE=$(BIN)/coffee
+CJSIFY=$(BIN)/cjsify
 
 .PHONY: test
 
@@ -8,6 +11,12 @@ compile:
 
 watch:
 	$(COFFEE) -cwo ./lib ./src
+
+browserify:
+	$(CJSIFY) --export Bencode ./index.js -o ./bencode.js
+
+browserify-min:
+	$(CJSIFY) --minify --export Bencode ./index.js -o ./bencode-min.js
 
 test:
 	$(MOCHA) --compilers coffee:coffee-script --reporter spec --recursive --colors
