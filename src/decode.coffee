@@ -2,8 +2,7 @@
 
 module.exports = class Decode
   @decode = (bencodedString) ->
-    throw (new Error 'Cannont decode null objects') unless bencodedString?
-    throw (new Error 'Decode only accepts a bencoded string') unless isString bencodedString
+    throw (new Error 'Argument must be a bencoded string') unless isString bencodedString
 
     (new Decode bencodedString).decode()
 

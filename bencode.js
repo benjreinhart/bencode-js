@@ -67,11 +67,8 @@
       module.exports = Decode = function () {
         var INTEGER_REGEX, TYPES, decodeInteger, decodeString, getType, isDataStructure, primitives;
         Decode.decode = function (bencodedString) {
-          if (bencodedString == null) {
-            throw new Error('Cannont decode null objects');
-          }
           if (!isString(bencodedString)) {
-            throw new Error('Decode only accepts a bencoded string');
+            throw new Error('Argument must be a bencoded string');
           }
           return new Decode(bencodedString).decode();
         };
