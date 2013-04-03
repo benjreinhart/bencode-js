@@ -1,6 +1,6 @@
 {
     "name": "bencode-js"
-  , "version": "0.0.2"
+  , "version": "0.0.3"
   , "description": "JavaScript solution for implmenting the encoding and decoding of the Bencode format"
   , "author": "benjreinhart"
 
@@ -8,8 +8,10 @@
     [
         "bencode"
       , "bittorrent"
-      , "encode"
+      , "browser"
       , "decode"
+      , "encode"
+      , "node"
     ]
 
   , "devDependencies":
@@ -25,6 +27,12 @@
         "type" : "git"
       , "url"  : "git@github.com:benjreinhart/bencode-js.git"
     }
+
+  , "bugs":
+    {
+        "url": "https://github.com/benjreinhart/bencode-js/issues"
+    }
+
 
   , "license": "MIT"
   , "main": "index"
