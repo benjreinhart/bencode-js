@@ -201,17 +201,13 @@
         return 'i' + integer + 'e';
       };
       encodeList = function (array) {
-        var list, object;
-        list = function () {
-          var _i, _len, _results;
-          _results = [];
-          for (_i = 0, _len = array.length; _i < _len; _i++) {
-            object = array[_i];
-            _results.push(encode(object));
-          }
-          return _results;
-        }();
-        return 'l' + list.join('') + 'e';
+        var bencodedString, object, _i, _len;
+        bencodedString = '';
+        for (_i = 0, _len = array.length; _i < _len; _i++) {
+          object = array[_i];
+          bencodedString += encode(object);
+        }
+        return 'l' + bencodedString + 'e';
       };
       encodeDictionary = function (object) {
         var bencodedString, key, _i, _len, _ref2;
@@ -219,7 +215,7 @@
         _ref2 = Object.keys(object).sort();
         for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
           key = _ref2[_i];
-          bencodedString += '' + encode(key) + encode(object[key]);
+          bencodedString += encode(key).concat(encode(object[key]));
         }
         return 'd' + bencodedString + 'e';
       };

@@ -25,15 +25,18 @@ encodeInteger = (integer) ->
   "i#{ integer }e"
 
 encodeList = (array) ->
-  list = (encode object for object in array)
+  bencodedString = ''
 
-  "l#{ list.join '' }e"
+  for object in array
+    bencodedString += (encode object)
+
+  "l#{ bencodedString }e"
 
 encodeDictionary = (object) ->
   bencodedString = ''
 
   for key in (Object.keys object).sort()
-    bencodedString += "#{ encode key }#{ encode object[key] }"
+    bencodedString += (encode key).concat(encode object[key])
 
   "d#{ bencodedString }e"
 
