@@ -58,14 +58,21 @@
   });
   require.define('/lib/decode.js', function (module, exports, __dirname, __filename) {
     (function () {
-      var Decode, __bind = function (fn, me) {
+      var Decode, isString, __bind = function (fn, me) {
           return function () {
             return fn.apply(me, arguments);
           };
         };
+      isString = require('/lib/identity_helpers.js', module).isString;
       module.exports = Decode = function () {
         var INTEGER_REGEX, TYPES, decodeInteger, decodeString, getType, isDataStructure, primitives;
         Decode.decode = function (bencodedString) {
+          if (bencodedString == null) {
+            throw new Error('Cannont decode null objects');
+          }
+          if (!isString(bencodedString)) {
+            throw new Error('Decode only accepts a bencoded string');
+          }
           return new Decode(bencodedString).decode();
         };
         function Decode(bencodedString) {
@@ -137,13 +144,33 @@
       }();
     }.call(this));
   });
+  require.define('/lib/identity_helpers.js', function (module, exports, __dirname, __filename) {
+    (function () {
+      var toString, typeTest, _ref;
+      toString = Object.prototype.toString;
+      typeTest = function (type) {
+        return function (obj) {
+          return toString.call(obj) === '[object ' + type + ']';
+        };
+      };
+      module.exports = {
+        isArray: (_ref = Array.isArray) != null ? _ref : typeTest('Array'),
+        isObject: function (obj) {
+          return obj === Object(obj);
+        },
+        isString: typeTest('String'),
+        isNumber: typeTest('Number')
+      };
+    }.call(this));
+  });
   require.define('/lib/encode.js', function (module, exports, __dirname, __filename) {
     (function () {
-      var encode, encodeDictionary, encodeInteger, encodeList, encodeString, encodingFunctions, getType, isArray, isDataStructure, isNumber, isObject, isString, sort, toString, typeTest, _ref, _ref1, __hasProp = {}.hasOwnProperty;
+      var encode, encodeDictionary, encodeInteger, encodeList, encodeString, encodingFunctions, getType, isArray, isDataStructure, isNumber, isObject, isString, sort, _ref, _ref1, __hasProp = {}.hasOwnProperty;
+      _ref = require('/lib/identity_helpers.js', module), isArray = _ref.isArray, isString = _ref.isString, isNumber = _ref.isNumber, isObject = _ref.isObject;
       exports.encode = encode = function (object) {
         return encodingFunctions[getType(object)](object);
       };
-      if ((_ref = Object.keys) == null) {
+      if ((_ref1 = Object.keys) == null) {
         Object.keys = function (o) {
           var key, _results;
           _results = [];
@@ -156,18 +183,6 @@
         };
       }
       sort = Array.prototype.sort;
-      toString = Object.prototype.toString;
-      typeTest = function (type) {
-        return function (obj) {
-          return toString.call(obj) === '[object ' + type + ']';
-        };
-      };
-      isArray = (_ref1 = Array.isArray) != null ? _ref1 : typeTest('Array');
-      isObject = function (obj) {
-        return obj === Object(obj);
-      };
-      isString = typeTest('String');
-      isNumber = typeTest('Number');
       getType = function (object) {
         if (isString(object)) {
           return 'string';

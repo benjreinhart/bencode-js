@@ -24,9 +24,9 @@ Bencode.encode(...)
 
 In the browser the object is available globally on `window.Bencode`.
 
-### Encode
+### Bencode#encode(object)
 
-
+`object` is either a `String`, `Number`, `Array`, or `Object`.
 
 
 ```javascript
@@ -36,7 +36,9 @@ Bencode.encode(["str", 123])     // => "l3:stri123ee"
 Bencode.encode({ key: "value" }) // => "d3:key5:valuee"
 ```
 
-### Decode
+### Bencode#decode(string)
+
+`string` is a Bencoded string.
 
 ```javascript
 Bencode.decode("d3:key5:valuee") // => { key: "value" }

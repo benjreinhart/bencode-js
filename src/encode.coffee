@@ -1,3 +1,5 @@
+{isArray, isString, isNumber, isObject} = require './identity_helpers'
+
 exports.encode = encode = (object) ->
   encodingFunctions[ (getType object) ] object
 
@@ -8,14 +10,7 @@ exports.encode = encode = (object) ->
 
 Object.keys ?= (o) -> key for own key of o
 
-sort     = Array::sort
-toString = Object::toString
-typeTest = (type) -> (obj) -> (toString.call obj) is "[object #{ type }]"
-
-isArray  = Array.isArray ? (typeTest 'Array')
-isObject = (obj) -> obj is (Object obj)
-isString = typeTest 'String'
-isNumber = typeTest 'Number'
+sort = Array::sort
 
 getType = (object) ->
   return 'string'     if isString object
