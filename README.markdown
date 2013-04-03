@@ -1,74 +1,43 @@
 # Bencode-js
 
-CURRENTLY A WORK IN PROGRESS. NOT FINISHED YET.
-
-
-JavaScript solution for implmenting the encoding and decoding of the Bencode
-format.
+Zero dependency JavaScript solution for implmenting the encoding and decoding of the Bencode
+format. Works in both browser and commonjs environments.
 
 * [BitTorrent Specification](http://wiki.theory.org/BitTorrentSpecification)
 * [Bencode](http://en.wikipedia.org/wiki/Bencode)
 
-Currently only works in browser environments, but I intend to add
-support for CommonJS modules.
+## Install
 
-This solution uses classes and OOP.
+`npm install bencode-js`
 
-This repo is implemented in a Ruby environment, for easy Jasmine testing
-integration.
+For the browser, simply copy either the compressed or uncompressed file into your app and include it on your web page.
 
-# Usage
+## Usage
 
-Include the files in the webpage. Both the ```Encode``` and ```Decode```
-classes use functions from the utilities module (aka utilities.js is a
-dependency and is required in order for ```Encode``` and ```Decode```
-to work). I recommend combining all three files into one, no need for
-extra HTTP requests.
+CommonJS environments:
+
+```javascript
+Bencode = require('bencode-js')
+Bencode.decode(...)
+Bencode.encode(...)
+```
+
+In the browser the object is available globally on `window.Bencode`.
 
 ### Encode
 
-The ```encode()``` function is attached to ```Object```, ```Array```,
-```String``` and ```Number```'s prototype, so you can just call it on
-an instance of those types like so:
 
 
-```
-"string".encode()              // => "6:string"
-(123).encode()                 // => "i123e"
-["str", 123].encode()          // => "l3:stri123ee"
-({ key: "value" }).encode()    // => "d3:key5:valuee"
+
+```javascript
+Bencode.encode("string")         // => "6:string"
+Bencode.encode(123)              // => "i123e"
+Bencode.encode(["str", 123])     // => "l3:stri123ee"
+Bencode.encode({ key: "value" }) // => "d3:key5:valuee"
 ```
 
 ### Decode
 
-The ```decode()``` function is attached to ```String```'s prototype
-and is therefore available on an instance of a string like so:
-
-
+```javascript
+Bencode.decode("d3:key5:valuee") // => { key: "value" }
 ```
-"d3:key5:valuee".decode()      // => { key: "value" }
-```
-
-### Classes
-
-You shouldn't need to directly access the classes (you should just
-call ```encode()``` and ```decode()``` on instances of objects),
-but if you do, the classes are namespaced under Bencode and
-attached to ```window```:
-
-```
-window.Bencode.Encode
-window.Bencode.Decode
-```
-
-# TODOS
-
-Needs much more thorough testing.
-
-Needs much better Error handling.
-
-Decode class (especially the decode() method in the Decode class) needs
-refactoring.
-
-Implement it so it can be used in both a Browser and CommonJS
-environment.
