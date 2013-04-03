@@ -14,8 +14,6 @@ watch:
 
 browserify:
 	$(CJSIFY) --export Bencode ./index.js --output ./bencode.js
-
-browserify-min:
 	$(CJSIFY) --minify --export Bencode ./index.js --output ./bencode-min.js
 
 test:
