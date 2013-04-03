@@ -12,7 +12,7 @@ module.exports = class Decode
 
   decode: =>
     type = getType @bencodedString[ @counter() ]
-    return (decodingFunctions[type].call this) unless isDataStructure type
+    return (primitives[type].call this) unless isDataStructure type
 
     object = if type is 'list' then [] else {}
 
@@ -22,7 +22,7 @@ module.exports = class Decode
         @counter 1
         break
 
-      if type is 'list'
+      if 'list' is type
         object.push @decode()
       else
         key = @decode()
@@ -64,7 +64,7 @@ module.exports = class Decode
 
     +integer
 
-  decodingFunctions =
+  primitives =
     string  : decodeString
     integer : decodeInteger
 
