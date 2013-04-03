@@ -8,8 +8,7 @@ exports.encode = encode = (object) ->
 
 Object.keys ?= (o) -> key for own key of o
 
-sort = Array::sort
-
+sort     = Array::sort
 toString = Object::toString
 typeTest = (type) -> (obj) -> (toString.call obj) is "[object #{ type }]"
 
