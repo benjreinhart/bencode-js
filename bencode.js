@@ -162,7 +162,7 @@
   });
   require.define('/lib/encode.js', function (module, exports, __dirname, __filename) {
     (function () {
-      var encode, encodeDictionary, encodeInteger, encodeList, encodeString, encodingFunctions, getType, isArray, isDataStructure, isNumber, isObject, isString, sort, _ref, _ref1, __hasProp = {}.hasOwnProperty;
+      var encode, encodeDictionary, encodeInteger, encodeList, encodeString, encodingFunctions, getType, isArray, isNumber, isObject, isString, _ref, _ref1, __hasProp = {}.hasOwnProperty;
       _ref = require('/lib/identity_helpers.js', module), isArray = _ref.isArray, isString = _ref.isString, isNumber = _ref.isNumber, isObject = _ref.isObject;
       exports.encode = encode = function (object) {
         return encodingFunctions[getType(object)](object);
@@ -179,7 +179,6 @@
           return _results;
         };
       }
-      sort = Array.prototype.sort;
       getType = function (object) {
         if (isString(object)) {
           return 'string';
@@ -194,10 +193,6 @@
           return 'dictionary';
         }
         throw new Error('Cannot bencode object: ' + object);
-      };
-      isDataStructure = function (object) {
-        var _ref2;
-        return (_ref2 = getType(object)) === 'list' || _ref2 === 'dictionary';
       };
       encodeString = function (string) {
         return '' + string.length + ':' + string;
@@ -219,12 +214,12 @@
         return 'l' + list.join('') + 'e';
       };
       encodeDictionary = function (object) {
-        var bencodedString, key, sortedKeys, _i, _len;
-        sortedKeys = sort.call(Object.keys(object));
+        var bencodedString, key, _i, _len, _ref2;
         bencodedString = '';
-        for (_i = 0, _len = sortedKeys.length; _i < _len; _i++) {
-          key = sortedKeys[_i];
-          bencodedString = bencodedString.concat('' + encode(key) + encode(object[key]));
+        _ref2 = Object.keys(object).sort();
+        for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+          key = _ref2[_i];
+          bencodedString += '' + encode(key) + encode(object[key]);
         }
         return 'd' + bencodedString + 'e';
       };

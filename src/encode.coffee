@@ -10,8 +10,6 @@ exports.encode = encode = (object) ->
 
 Object.keys ?= (o) -> key for own key of o
 
-sort = Array::sort
-
 getType = (object) ->
   return 'string'     if isString object
   return 'integer'    if isNumber object
@@ -19,9 +17,6 @@ getType = (object) ->
   return 'dictionary' if isObject object
 
   throw (new Error "Cannot bencode object: #{ object }")
-
-isDataStructure = (object) ->
-  (getType object) in ['list', 'dictionary']
 
 encodeString = (string) ->
   "#{ string.length }:#{ string }"
@@ -35,11 +30,10 @@ encodeList = (array) ->
   "l#{ list.join '' }e"
 
 encodeDictionary = (object) ->
-  sortedKeys = sort.call (Object.keys object)
-
   bencodedString = ''
-  for key in sortedKeys
-    bencodedString = bencodedString.concat "#{ encode key }#{ encode object[key] }"
+
+  for key in (Object.keys object).sort()
+    bencodedString += "#{ encode key }#{ encode object[key] }"
 
   "d#{ bencodedString }e"
 
