@@ -1,6 +1,6 @@
 {isArray, isString, isNumber, isObject} = require './identity_helpers'
 
-exports.encode = encode = (object) ->
+module.exports = encode = (object) ->
   encodingFunctions[ (getType object) ] object
 
 
