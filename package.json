@@ -1,6 +1,6 @@
 {
     "name": "bencode-js"
-  , "version": "0.0.5"
+  , "version": "0.0.6"
   , "description": "JavaScript solution for implmenting the encoding and decoding of the Bencode format"
   , "author": "benjreinhart"
 
