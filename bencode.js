@@ -57,76 +57,74 @@
   });
   require.define('/lib/decode.js', function (module, exports, __dirname, __filename) {
     (function () {
-      var INTEGER_REGEX, TYPES, composeDecodingFunction, decodeInteger, decodeString, getType, isDataStructure, isString, primitives;
+      var INTEGER_REGEX, STRING_REGEX, TYPES, decode, decodeInteger, decodeString, getType, isDataStructure, isString, primitives;
       isString = require('/lib/identity_helpers.js', module).isString;
       module.exports = function (bencodedString) {
-        var counter, index;
         if (!isString(bencodedString)) {
           throw new Error('Argument must be a bencoded string');
         }
-        index = 0;
-        counter = function (amount) {
-          if (amount == null) {
-            return index;
+        return decode(bencodedString)[0];
+      };
+      decode = function (bencodedString) {
+        var key, object, type, value, _ref, _ref1, _ref2;
+        type = getType(bencodedString[0]);
+        if (!isDataStructure(type)) {
+          return primitives[type](bencodedString);
+        }
+        object = 'list' === type ? [] : {};
+        bencodedString = bencodedString.substr(1);
+        while (bencodedString.length) {
+          if ('e' === bencodedString[0]) {
+            bencodedString = bencodedString.substr(1);
+            break;
           }
-          return index += amount;
-        };
-        return composeDecodingFunction(bencodedString, counter, bencodedString.length)();
+          if ('list' === type) {
+            _ref = decode(bencodedString), value = _ref[0], bencodedString = _ref[1];
+            object.push(value);
+          } else {
+            _ref1 = decode(bencodedString), key = _ref1[0], bencodedString = _ref1[1];
+            _ref2 = decode(bencodedString), value = _ref2[0], bencodedString = _ref2[1];
+            object[key] = value;
+          }
+        }
+        return [
+          object,
+          bencodedString
+        ];
       };
       TYPES = {
         'i': 'integer',
         'l': 'list',
         'd': 'dictionary'
       };
-      INTEGER_REGEX = /^i(-?\d+)e/;
-      getType = function (bencodedString) {
-        return TYPES[bencodedString[0]] || 'string';
+      STRING_REGEX = /^(\d+):(.*)$/;
+      INTEGER_REGEX = /^i(-?\d+)e(.*)$/;
+      getType = function (char) {
+        return TYPES[char] || 'string';
       };
       isDataStructure = function (type) {
         return type === 'list' || type === 'dictionary';
       };
-      decodeString = function (bencodedString, counter) {
-        var len, str;
-        str = bencodedString.slice(counter());
-        len = str.split(':', 1)[0];
-        counter(+len + (len.length + 1));
-        return str.slice(len.length + 1).slice(0, +len);
+      decodeString = function (bencodedString) {
+        var length, remainingString, _, _ref;
+        _ref = bencodedString.match(STRING_REGEX), _ = _ref[0], length = _ref[1], remainingString = _ref[2];
+        length = +length;
+        return [
+          remainingString.substr(0, length),
+          remainingString.substr(length)
+        ];
       };
-      decodeInteger = function (bencodedString, counter) {
-        var encodedInteger, integer, str, _ref;
-        str = bencodedString.slice(counter());
-        _ref = str.match(INTEGER_REGEX), encodedInteger = _ref[0], integer = _ref[1];
-        counter(encodedInteger.length);
-        return +integer;
+      decodeInteger = function (bencodedString) {
+        var integer, remainingString, _, _ref;
+        _ref = bencodedString.match(INTEGER_REGEX), _ = _ref[0], integer = _ref[1], remainingString = _ref[2];
+        return [
+          +integer,
+          remainingString
+        ];
       };
       primitives = {
         string: decodeString,
         integer: decodeInteger
-      };
-      composeDecodingFunction = function (bencodedString, counter, strLength) {
-        var decode;
-        return decode = function () {
-          var key, object, type;
-          type = getType(bencodedString[counter()]);
-          if (!isDataStructure(type)) {
-            return primitives[type](bencodedString, counter);
-          }
-          object = 'list' === type ? [] : {};
-          counter(1);
-          while (counter() < strLength) {
-            if ('e' === bencodedString[counter()]) {
-              counter(1);
-              break;
-            }
-            if ('list' === type) {
-              object.push(decode());
-            } else {
-              key = decode();
-              object[key] = decode();
-            }
-          }
-          return object;
-        };
       };
     }.call(this));
   });

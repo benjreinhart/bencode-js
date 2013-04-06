@@ -3,12 +3,30 @@
 module.exports = (bencodedString) ->
   throw (new Error 'Argument must be a bencoded string') unless isString bencodedString
 
-  index = 0
-  counter = (amount) ->
-    return index unless amount?
-    index += amount
+  (decode bencodedString)[0]
 
-  do (composeDecodingFunction bencodedString, counter, bencodedString.length)
+decode = (bencodedString) ->
+  type = getType bencodedString[0]
+  return (primitives[type] bencodedString) unless isDataStructure type
+
+  object = if 'list' is type then [] else {}
+
+  bencodedString = bencodedString.substr 1
+  while bencodedString.length
+    if 'e' is bencodedString[0]
+      bencodedString = bencodedString.substr 1
+      break
+
+    if 'list' is type
+      [value, bencodedString] = decode bencodedString
+      object.push value
+    else
+      [key,   bencodedString] = decode bencodedString
+      [value, bencodedString] = decode bencodedString
+
+      object[key] = value
+
+  [object, bencodedString]
 
 
 ###########
@@ -20,51 +38,25 @@ TYPES =
   'l': 'list'
   'd': 'dictionary'
 
-INTEGER_REGEX = /^i(-?\d+)e/
+STRING_REGEX  = /^(\d+):(.*)$/
+INTEGER_REGEX = /^i(-?\d+)e(.*)$/
 
-getType = (bencodedString) ->
-  TYPES[ bencodedString[0] ] || 'string'
+getType = (char) ->
+  TYPES[ char ] || 'string'
 
 isDataStructure = (type) ->
   type in ['list', 'dictionary']
 
-decodeString = (bencodedString, counter) ->
-  str = bencodedString.slice counter()
-  len = (str.split ':', 1)[0]
+decodeString = (bencodedString) ->
+  [_, length, remainingString] = bencodedString.match STRING_REGEX
 
-  counter +len + (len.length + 1)
+  length = +length
+  [(remainingString.substr 0, length), (remainingString.substr length)]
 
-  str.slice(len.length + 1).slice 0, +len
-
-decodeInteger = (bencodedString, counter) ->
-  str = bencodedString.slice counter()
-
-  [encodedInteger, integer] = str.match INTEGER_REGEX
-  counter encodedInteger.length
-
-  +integer
+decodeInteger = (bencodedString) ->
+  [_, integer, remainingString] = bencodedString.match INTEGER_REGEX
+  [+integer, remainingString]
 
 primitives =
   string  : decodeString
   integer : decodeInteger
-
-composeDecodingFunction = (bencodedString, counter, strLength) ->
-  return decode = ->
-    type = getType bencodedString[ counter() ]
-    return (primitives[type] bencodedString, counter) unless isDataStructure type
-
-    object = if 'list' is type then [] else {}
-
-    counter 1
-    while counter() < strLength
-      if 'e' is bencodedString[ counter() ]
-        counter 1
-        break
-
-      if 'list' is type
-        object.push decode()
-      else
-        key = decode()
-        object[ key ] = decode()
-
-    object
