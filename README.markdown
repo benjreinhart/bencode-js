@@ -22,7 +22,7 @@ Bencode.decode(...)
 Bencode.encode(...)
 ```
 
-In the browser the object is available globally on `window.Bencode`.
+In the browser the object is available globally as `window.Bencode`.
 
 ### Bencode#encode(object)
 
