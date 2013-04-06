@@ -49,8 +49,6 @@ isDataStructure = (type) ->
 
 decodeString = (bencodedString) ->
   [_, length, remainingString] = bencodedString.match STRING_REGEX
-
-  length = +length
   [(remainingString.substr 0, length), (remainingString.substr length)]
 
 decodeInteger = (bencodedString) ->
