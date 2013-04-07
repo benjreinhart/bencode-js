@@ -1,47 +1,20 @@
-{isArray, isString, isNumber, isObject} = require './identity_helpers'
+encodeString = (s) -> "#{s.length}:#{s}"
 
-module.exports = encode = (object) ->
-  encodingFunctions[ (getType object) ] object
-
-
-###########
-# PRIVATE #
-###########
-
-Object.keys ?= (o) -> key for own key of o
-
-getType = (object) ->
-  return 'string'     if isString object
-  return 'integer'    if isNumber object
-  return 'list'       if isArray  object
-  return 'dictionary' if isObject object
-
-  throw (new Error "Cannot bencode object: #{ object }")
-
-encodeString = (string) ->
-  "#{ string.length }:#{ string }"
-
-encodeInteger = (integer) ->
-  "i#{ integer }e"
+encodeInteger = (i) -> "i#{i}e"
 
 encodeList = (array) ->
-  bencodedString = ''
-
-  for object in array
-    bencodedString += (encode object)
-
-  "l#{ bencodedString }e"
+  encodedContents = (encode object for object in array).join ''
+  "l#{encodedContents}e"
 
 encodeDictionary = (object) ->
-  bencodedString = ''
+  keys = (key for own key of object).sort()
+  encodedContents = ("#{encode key}#{encode object[key]}" for key in keys).join ''
+  "d#{encodedContents}e"
 
-  for key in (Object.keys object).sort()
-    bencodedString += (encode key).concat(encode object[key])
+encode = (object) -> switch
+  when typeof object is 'string' then encodeString object
+  when typeof object is 'number' then encodeInteger 0 | object
+  when '[object Array]' is {}.toString.call object then encodeList object
+  else encodeDictionary object
 
-  "d#{ bencodedString }e"
-
-encodingFunctions =
-  'string'     : encodeString
-  'integer'    : encodeInteger
-  'list'       : encodeList
-  'dictionary' : encodeDictionary
+module.exports = encode

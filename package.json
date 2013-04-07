@@ -18,8 +18,8 @@
     {
         "chai"                : ">=1.5.0"
       , "mocha"               : ">=1.8.2"
-      , "coffee-script"       : ">=1.4.0"
-      , "commonjs-everywhere" : ">=0.5.1"
+      , "coffee-script-redux" : "~2.0.0"
+      , "commonjs-everywhere" : "~0.6.1"
     }
 
   , "repository":
@@ -35,5 +35,5 @@
 
 
   , "license": "MIT"
-  , "main": "index"
+  , "main": "lib/index.js"
 }

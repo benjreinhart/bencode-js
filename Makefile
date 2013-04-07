@@ -1,20 +1,25 @@
 BIN=./node_modules/.bin
 
 MOCHA=$(BIN)/mocha
-COFFEE=$(BIN)/coffee
-CJSIFY=$(BIN)/cjsify
+COFFEE=$(BIN)/coffee --js
+CJSIFY=$(BIN)/cjsify --export Bencode src/index.coffee
+
+SRCS = $(shell find src -name "*.coffee" -type f | sort)
+LIBS = $(SRCS:src/%.coffee=lib/%.js)
+
+all: compile test
+compile: $(LIBS)
+
+lib/%.js: src/%.coffee
+	$(COFFEE) <"$<" >"$@"
+
+browser: bencode.js bencode-min.js
+bencode.js: $(SRCS)
+	$(CJSIFY) --no-node > bencode.js
+bencode-min.js: $(SRCS)
+	$(CJSIFY) --no-node --minify > bencode-min.js
 
 .PHONY: test
 
-compile:
-	$(COFFEE) -co ./lib ./src
-
-watch:
-	$(COFFEE) -cwo ./lib ./src
-
-browserify:
-	$(CJSIFY) --export Bencode ./index.js --output ./bencode.js
-	$(CJSIFY) --minify --export Bencode ./index.js --output ./bencode-min.js
-
 test:
-	$(MOCHA) --compilers coffee:coffee-script --reporter spec --recursive --colors
+	$(MOCHA) --compilers coffee:coffee-script-redux --reporter spec --recursive --colors

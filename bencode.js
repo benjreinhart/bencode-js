@@ -1,23 +1,4 @@
 (function (global) {
-  var process = function () {
-      var cwd = '/';
-      return {
-        title: 'browser',
-        version: 'v0.10.1',
-        browser: true,
-        env: {},
-        argv: [],
-        nextTick: function (fn) {
-          setTimeout(fn, 0);
-        },
-        cwd: function () {
-          return cwd;
-        },
-        chdir: function (dir) {
-          cwd = dir;
-        }
-      };
-    }();
   function require(file, parentModule) {
     if ({}.hasOwnProperty.call(require.cache, file))
       return require.cache[file];
@@ -49,169 +30,137 @@
   require.define = function (file, fn) {
     require.modules[file] = fn;
   };
-  require.define('/index.js', function (module, exports, __dirname, __filename) {
+  require.define('/src/index.coffee', function (module, exports, __dirname, __filename) {
     module.exports = {
-      encode: require('/lib/encode.js', module),
-      decode: require('/lib/decode.js', module)
+      encode: require('/src/encode.coffee', module),
+      decode: require('/src/decode.coffee', module)
     };
   });
-  require.define('/lib/decode.js', function (module, exports, __dirname, __filename) {
-    (function () {
-      var INTEGER_REGEX, STRING_REGEX, TYPES, decode, decodeInteger, decodeString, getType, isDataStructure, isString, primitives;
-      isString = require('/lib/identity_helpers.js', module).isString;
-      module.exports = function (bencodedString) {
-        if (!isString(bencodedString)) {
-          throw new Error('Argument must be a bencoded string');
-        }
-        return decode(bencodedString)[0];
-      };
-      decode = function (bencodedString) {
-        var key, object, type, value, _ref, _ref1, _ref2;
-        type = getType(bencodedString[0]);
-        if (!isDataStructure(type)) {
-          return primitives[type](bencodedString);
-        }
-        object = 'list' === type ? [] : {};
-        bencodedString = bencodedString.substr(1);
-        while (bencodedString.length) {
-          if ('e' === bencodedString[0]) {
-            bencodedString = bencodedString.substr(1);
-            break;
+  require.define('/src/decode.coffee', function (module, exports, __dirname, __filename) {
+    var read;
+    read = function (str) {
+      var arr, bencoded, cache$, cache$1, cursor, key, keyLength, obj, startPos, stringLength, value, valueLength;
+      switch (str[0]) {
+      case 'i':
+        bencoded = str.match(/^i-?\d+e/)[0];
+        return [
+          bencoded.length,
+          +bencoded.slice(1, -1)
+        ];
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+        stringLength = str.match(/^\d+/)[0];
+        startPos = stringLength.length + 1;
+        bencoded = str.slice(0, startPos + +stringLength);
+        return [
+          bencoded.length,
+          bencoded.slice(startPos)
+        ];
+      case 'l':
+        cursor = 1;
+        arr = function (accum$) {
+          var cache$, entry, entryLength;
+          while (str[cursor] !== 'e') {
+            cache$ = read(str.slice(cursor));
+            entryLength = cache$[0];
+            entry = cache$[1];
+            cursor += entryLength;
+            accum$.push(entry);
           }
-          if ('list' === type) {
-            _ref = decode(bencodedString), value = _ref[0], bencodedString = _ref[1];
-            object.push(value);
-          } else {
-            _ref1 = decode(bencodedString), key = _ref1[0], bencodedString = _ref1[1];
-            _ref2 = decode(bencodedString), value = _ref2[0], bencodedString = _ref2[1];
-            object[key] = value;
-          }
+          return accum$;
+        }.call(this, []);
+        return [
+          cursor + 1,
+          arr
+        ];
+      case 'd':
+        cursor = 1;
+        obj = {};
+        while (str[cursor] !== 'e') {
+          cache$ = read(str.slice(cursor));
+          keyLength = cache$[0];
+          key = cache$[1];
+          cache$1 = read(str.slice(cursor + keyLength));
+          valueLength = cache$1[0];
+          value = cache$1[1];
+          cursor += keyLength + valueLength;
+          obj[key] = value;
         }
         return [
-          object,
-          bencodedString
+          cursor + 1,
+          obj
         ];
-      };
-      TYPES = {
-        'i': 'integer',
-        'l': 'list',
-        'd': 'dictionary'
-      };
-      STRING_REGEX = /^(\d+):(.*)$/;
-      INTEGER_REGEX = /^i(-?\d+)e(.*)$/;
-      getType = function (char) {
-        return TYPES[char] || 'string';
-      };
-      isDataStructure = function (type) {
-        return type === 'list' || type === 'dictionary';
-      };
-      decodeString = function (bencodedString) {
-        var length, remainingString, _, _ref;
-        _ref = bencodedString.match(STRING_REGEX), _ = _ref[0], length = _ref[1], remainingString = _ref[2];
-        return [
-          remainingString.substr(0, length),
-          remainingString.substr(length)
-        ];
-      };
-      decodeInteger = function (bencodedString) {
-        var integer, remainingString, _, _ref;
-        _ref = bencodedString.match(INTEGER_REGEX), _ = _ref[0], integer = _ref[1], remainingString = _ref[2];
-        return [
-          +integer,
-          remainingString
-        ];
-      };
-      primitives = {
-        string: decodeString,
-        integer: decodeInteger
-      };
-    }.call(this));
-  });
-  require.define('/lib/identity_helpers.js', function (module, exports, __dirname, __filename) {
-    (function () {
-      var toString, typeTest, _ref;
-      toString = Object.prototype.toString;
-      typeTest = function (type) {
-        return function (obj) {
-          return toString.call(obj) === '[object ' + type + ']';
-        };
-      };
-      module.exports = {
-        isArray: (_ref = Array.isArray) != null ? _ref : typeTest('Array'),
-        isObject: function (obj) {
-          return obj === Object(obj);
-        },
-        isString: typeTest('String'),
-        isNumber: typeTest('Number')
-      };
-    }.call(this));
-  });
-  require.define('/lib/encode.js', function (module, exports, __dirname, __filename) {
-    (function () {
-      var encode, encodeDictionary, encodeInteger, encodeList, encodeString, encodingFunctions, getType, isArray, isNumber, isObject, isString, _ref, _ref1, __hasProp = {}.hasOwnProperty;
-      _ref = require('/lib/identity_helpers.js', module), isArray = _ref.isArray, isString = _ref.isString, isNumber = _ref.isNumber, isObject = _ref.isObject;
-      module.exports = encode = function (object) {
-        return encodingFunctions[getType(object)](object);
-      };
-      if ((_ref1 = Object.keys) == null) {
-        Object.keys = function (o) {
-          var key, _results;
-          _results = [];
-          for (key in o) {
-            if (!__hasProp.call(o, key))
-              continue;
-            _results.push(key);
-          }
-          return _results;
-        };
       }
-      getType = function (object) {
-        if (isString(object)) {
-          return 'string';
-        }
-        if (isNumber(object)) {
-          return 'integer';
-        }
-        if (isArray(object)) {
-          return 'list';
-        }
-        if (isObject(object)) {
-          return 'dictionary';
-        }
-        throw new Error('Cannot bencode object: ' + object);
-      };
-      encodeString = function (string) {
-        return '' + string.length + ':' + string;
-      };
-      encodeInteger = function (integer) {
-        return 'i' + integer + 'e';
-      };
-      encodeList = function (array) {
-        var bencodedString, object, _i, _len;
-        bencodedString = '';
-        for (_i = 0, _len = array.length; _i < _len; _i++) {
-          object = array[_i];
-          bencodedString += encode(object);
-        }
-        return 'l' + bencodedString + 'e';
-      };
-      encodeDictionary = function (object) {
-        var bencodedString, key, _i, _len, _ref2;
-        bencodedString = '';
-        _ref2 = Object.keys(object).sort();
-        for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-          key = _ref2[_i];
-          bencodedString += encode(key).concat(encode(object[key]));
-        }
-        return 'd' + bencodedString + 'e';
-      };
-      encodingFunctions = {
-        'string': encodeString,
-        'integer': encodeInteger,
-        'list': encodeList,
-        'dictionary': encodeDictionary
-      };
-    }.call(this));
+    };
+    module.exports = function (str) {
+      return read(str)[1];
+    };
   });
-  global.Bencode = require('/index.js');
+  require.define('/src/encode.coffee', function (module, exports, __dirname, __filename) {
+    var encode, encodeDictionary, encodeInteger, encodeList, encodeString;
+    encodeString = function (s) {
+      return '' + s.length + ':' + s;
+    };
+    encodeInteger = function (i) {
+      return 'i' + i + 'e';
+    };
+    encodeList = function (array) {
+      var encodedContents;
+      encodedContents = function (accum$) {
+        var object;
+        for (var i$ = 0, length$ = array.length; i$ < length$; ++i$) {
+          object = array[i$];
+          accum$.push(encode(object));
+        }
+        return accum$;
+      }.call(this, []).join('');
+      return 'l' + encodedContents + 'e';
+    };
+    encodeDictionary = function (object) {
+      var encodedContents, keys;
+      keys = function (accum$) {
+        var key;
+        for (key in object) {
+          if (!isOwn$(object, key))
+            continue;
+          accum$.push(key);
+        }
+        return accum$;
+      }.call(this, []).sort();
+      encodedContents = function (accum$) {
+        var key;
+        for (var i$ = 0, length$ = keys.length; i$ < length$; ++i$) {
+          key = keys[i$];
+          accum$.push('' + encode(key) + encode(object[key]));
+        }
+        return accum$;
+      }.call(this, []).join('');
+      return 'd' + encodedContents + 'e';
+    };
+    encode = function (object) {
+      switch (false) {
+      case !(typeof object === 'string'):
+        return encodeString(object);
+      case !(typeof object === 'number'):
+        return encodeInteger(0 | object);
+      case !('[object Array]' === {}.toString.call(object)):
+        return encodeList(object);
+      default:
+        return encodeDictionary(object);
+      }
+    };
+    module.exports = encode;
+    function isOwn$(o, p) {
+      return {}.hasOwnProperty.call(o, p);
+    }
+  });
+  global.Bencode = require('/src/index.coffee');
 }.call(this, this));
