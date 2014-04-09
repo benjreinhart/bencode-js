@@ -13,7 +13,7 @@ describe 'encoding', ->
     it 'encodes negative integers', ->
       expect(encode -2234).to.equal 'i-2234e'
 
-  describe 'integers', ->
+  describe 'lists', ->
     it 'encodes a list as l<list items>e', ->
       expect(encode ['a string', 23]).to.equal 'l8:a stringi23ee'
 
