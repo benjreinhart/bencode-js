@@ -1,6 +1,6 @@
 # Bencode-js
 
-Zero dependency JavaScript solution for implmenting the encoding and decoding of the Bencode
+Zero dependency JavaScript solution for implementing the encoding and decoding of the Bencode
 format. Works in both browser and commonjs environments.
 
 * [BitTorrent Specification](http://wiki.theory.org/BitTorrentSpecification)
