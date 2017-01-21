@@ -13,7 +13,7 @@ encodeDictionary = (object) ->
 
 encode = (object) -> switch
   when typeof object is 'string' then encodeString object
-  when typeof object is 'number' then encodeInteger 0 | object
+  when typeof object is 'number' then encodeInteger Math.floor object
   when '[object Array]' is {}.toString.call object then encodeList object
   else encodeDictionary object
 

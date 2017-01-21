@@ -7,11 +7,14 @@ describe 'encoding', ->
       expect(encode 'omg hay thurrr').to.equal '14:omg hay thurrr'
 
   describe 'integers', ->
-    it 'encodes an as i<integer>e', ->
+    it 'encodes integers as i<integer>e', ->
       expect(encode 2234).to.equal 'i2234e'
 
     it 'encodes negative integers', ->
       expect(encode -2234).to.equal 'i-2234e'
+
+    it 'encodes large-ish integers', ->
+      expect(encode 2222222222).to.equal 'i2222222222e'
 
   describe 'lists', ->
     it 'encodes a list as l<list items>e', ->
