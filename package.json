@@ -18,7 +18,7 @@
     {
         "chai"                : ">=1.5.0"
       , "mocha"               : ">=1.8.2"
-      , "coffee-script-redux" : "~2.0.0"
+      , "coffee-script-redux" : "2.0.0-beta8"
       , "commonjs-everywhere" : "~0.6.1"
     }
 
