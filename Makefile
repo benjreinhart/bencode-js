@@ -22,4 +22,4 @@ bencode-min.js: $(SRCS)
 .PHONY: test
 
 test:
-	$(MOCHA) --compilers coffee:coffee-script-redux --reporter spec --recursive --colors
+	$(MOCHA) --compilers coffee:coffee-script-redux/register --reporter spec --recursive --colors
